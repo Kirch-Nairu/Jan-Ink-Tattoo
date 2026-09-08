@@ -31,5 +31,8 @@ jobs:
       - name: Typecheck
         run: npm run typecheck
 
+      - name: Verify portfolio assets
+        run: npm run verify-assets
+
       - name: Production build
         run: npm run build
