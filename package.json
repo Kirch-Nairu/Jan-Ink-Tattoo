@@ -9,7 +9,8 @@
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
-    "check": "npm run typecheck && npm run build"
+    "verify-assets": "node scripts/materialize-assets.mjs && node scripts/verify-assets.mjs",
+    "check": "npm run typecheck && npm run verify-assets && npm run build"
   },
   "dependencies": {
     "framer-motion": "12.23.12",
