@@ -3,10 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predev": "node scripts/materialize-assets.mjs",
     "dev": "next dev",
+    "prebuild": "node scripts/materialize-assets.mjs",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "typecheck": "tsc --noEmit",
+    "check": "npm run typecheck && npm run build"
   },
   "dependencies": {
     "framer-motion": "12.23.12",
