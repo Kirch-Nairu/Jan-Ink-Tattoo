@@ -1,0 +1,1 @@
+Portfolio image payloads are materialized at build time by scripts/materialize-assets.mjs.
