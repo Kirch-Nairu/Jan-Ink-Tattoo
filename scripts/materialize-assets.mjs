@@ -13,19 +13,30 @@ async function walk(dir) {
   for (const entry of entries) {
     const absolute = path.join(dir, entry.name);
     if (entry.isDirectory()) files.push(...(await walk(absolute)));
-    if (entry.isFile() && entry.name.endsWith(".b64")) files.push(absolute);
+    if (entry.isFile() && entry.name.includes(".b64")) files.push(absolute);
   }
 
   return files;
 }
 
-const files = (await walk(encodedRoot)).sort((a, b) => a.localeCompare(b));
-let count = 0;
+const sources = (await walk(encodedRoot)).sort((a, b) =>
+  a.localeCompare(b, undefined, { numeric: true }),
+);
 
-for (const source of files) {
-  const relative = path.relative(encodedRoot, source).replace(/\.b64$/, "");
+const grouped = new Map();
+for (const source of sources) {
+  const relative = path.relative(encodedRoot, source);
+  const logical = relative.replace(/\.b64(?:\.\d+)?$/, "");
+  const list = grouped.get(logical) ?? [];
+  list.push(source);
+  grouped.set(logical, list);
+}
+
+let count = 0;
+for (const [relative, parts] of grouped) {
+  const encodedParts = await Promise.all(parts.map((source) => readFile(source, "utf8")));
+  const encoded = encodedParts.join("").replace(/\s+/g, "");
   const target = path.join(outputRoot, relative);
-  const encoded = (await readFile(source, "utf8")).trim();
 
   await mkdir(path.dirname(target), { recursive: true });
   await writeFile(target, Buffer.from(encoded, "base64"));
