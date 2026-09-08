@@ -318,7 +318,7 @@ export default function JanInkSite() {
       <footer className="footer">
         <div><span className="footer-mark">JAN<br />INK.</span><p>Tattoo work by John Salceda.<br />Built around the work, not a template.</p></div>
         <div className="footer-links"><a href="#work">Work</a><a href="#artist">Artist</a><a href="#book">Book</a><a href={FB_PAGE} target="_blank" rel="noreferrer">Facebook Page</a><a href={FB_PERSONAL} target="_blank" rel="noreferrer">John Salceda</a></div>
-        <div className="footer-bottom"><span>© {new Date().getFullYear()} Jan Ink Tattoo</span><span>Bohol, Philippines</span></div>
+        <div className="footer-bottom"><span>© {new Date().getFullYear()} Jan Ink Tattoo</span><span>Bookings via Facebook</span></div>
       </footer>
 
       <div className="mobile-dock"><a href="#work">Portfolio</a><a href="#book">Book / Message <ArrowDownRight size={16} /></a></div>
