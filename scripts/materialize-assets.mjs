@@ -13,7 +13,9 @@ async function walk(dir) {
   for (const entry of entries) {
     const absolute = path.join(dir, entry.name);
     if (entry.isDirectory()) files.push(...(await walk(absolute)));
-    if (entry.isFile() && entry.name.includes(".b64")) files.push(absolute);
+    if (entry.isFile() && (entry.name.includes(".b64") || entry.name.endsWith(".json"))) {
+      files.push(absolute);
+    }
   }
 
   return files;
@@ -23,8 +25,11 @@ const sources = (await walk(encodedRoot)).sort((a, b) =>
   a.localeCompare(b, undefined, { numeric: true }),
 );
 
+const b64Sources = sources.filter((source) => source.includes(".b64"));
+const jsonSources = sources.filter((source) => source.endsWith(".json"));
+
 const grouped = new Map();
-for (const source of sources) {
+for (const source of b64Sources) {
   const relative = path.relative(encodedRoot, source);
   const logical = relative.replace(/\.b64(?:\.\d+)?$/, "");
   const list = grouped.get(logical) ?? [];
@@ -32,15 +37,25 @@ for (const source of sources) {
   grouped.set(logical, list);
 }
 
-let count = 0;
+const assets = new Map();
+
 for (const [relative, parts] of grouped) {
   const encodedParts = await Promise.all(parts.map((source) => readFile(source, "utf8")));
-  const encoded = encodedParts.join("").replace(/\s+/g, "");
-  const target = path.join(outputRoot, relative);
-
-  await mkdir(path.dirname(target), { recursive: true });
-  await writeFile(target, Buffer.from(encoded, "base64"));
-  count += 1;
+  assets.set(relative, encodedParts.join("").replace(/\s+/g, ""));
 }
 
-console.log(`[jan-ink] materialized ${count} portfolio image assets`);
+for (const source of jsonSources) {
+  const payload = JSON.parse(await readFile(source, "utf8"));
+  for (const [relative, encoded] of Object.entries(payload)) {
+    if (typeof encoded !== "string") continue;
+    assets.set(relative, encoded.replace(/\s+/g, ""));
+  }
+}
+
+for (const [relative, encoded] of assets) {
+  const target = path.join(outputRoot, relative);
+  await mkdir(path.dirname(target), { recursive: true });
+  await writeFile(target, Buffer.from(encoded, "base64"));
+}
+
+console.log(`[jan-ink] materialized ${assets.size} portfolio image assets`);
