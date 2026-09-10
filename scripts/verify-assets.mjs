@@ -30,8 +30,9 @@ for (const ref of refs) {
     throw new Error(`Invalid WebP asset: ${ref}`);
   }
 
-  if (ref.includes("artist-working") && bytes.length < 20_000) {
-    throw new Error(`Suspiciously small artist asset: ${ref} (${bytes.length} bytes)`);
+  const minimumBytes = ref.includes("artist-working") ? 100_000 : 75_000;
+  if (bytes.length < minimumBytes) {
+    throw new Error(`Suspiciously small image asset: ${ref} (${bytes.length} bytes)`);
   }
 }
 
