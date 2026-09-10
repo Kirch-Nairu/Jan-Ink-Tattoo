@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import "./qa-fixes.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://jan-ink-tattoo.vercel.app"),
