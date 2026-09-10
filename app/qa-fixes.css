@@ -1,0 +1,100 @@
+/* Live visual QA refinements — keep these overrides small and deliberate. */
+
+/* Artist portrait: use John's actual working photo as a strong editorial panel. */
+.artist-photo {
+  overflow: hidden;
+  background: #171411;
+}
+.artist-photo img {
+  object-position: center 44%;
+}
+
+/* Portfolio cards: improve perceived sharpness and keep crop behavior predictable. */
+.project-card img,
+.hero-image img,
+.artist-photo img {
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+/* Process section: remove the empty placeholder-box feeling. */
+.process-section {
+  padding-top: 96px;
+  padding-bottom: 104px;
+}
+.process-section .section-heading {
+  margin-bottom: 40px;
+}
+.process-grid {
+  gap: 14px;
+  border: 0;
+}
+.process-card {
+  position: relative;
+  min-height: 224px;
+  padding: 24px;
+  border: 1px solid var(--line);
+  background:
+    radial-gradient(circle at 92% 8%, rgba(198,74,52,.12), transparent 34%),
+    linear-gradient(145deg, rgba(240,232,220,.025), rgba(240,232,220,0));
+  overflow: hidden;
+  transition: transform .25s ease, border-color .25s ease, background .25s ease;
+}
+.process-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(198,74,52,.55);
+  background:
+    radial-gradient(circle at 92% 8%, rgba(198,74,52,.18), transparent 38%),
+    linear-gradient(145deg, rgba(240,232,220,.04), rgba(240,232,220,0));
+}
+.process-card > span {
+  display: block;
+  color: rgba(198,74,52,.3);
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  font-size: clamp(48px,4.2vw,72px);
+  line-height: .82;
+  letter-spacing: -.04em;
+}
+.process-card > svg {
+  position: absolute;
+  right: 22px;
+  top: 22px;
+  margin: 0;
+  color: var(--brass);
+  opacity: .8;
+}
+.process-card h3 {
+  margin: auto 0 10px;
+  font-size: clamp(20px,1.7vw,27px);
+  letter-spacing: -.02em;
+}
+.process-card p {
+  max-width: 30ch;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+@media (max-width: 980px) {
+  .process-section {
+    padding-top: 78px;
+    padding-bottom: 84px;
+  }
+  .process-grid {
+    grid-template-columns: repeat(2, minmax(0,1fr));
+  }
+  .process-card {
+    min-height: 210px;
+  }
+}
+
+@media (max-width: 620px) {
+  .process-grid {
+    grid-template-columns: 1fr;
+  }
+  .process-card {
+    min-height: 190px;
+  }
+  .artist-photo img {
+    object-position: center 40%;
+  }
+}
