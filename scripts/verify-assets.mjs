@@ -29,6 +29,10 @@ for (const ref of refs) {
   if (riff !== "RIFF" || webp !== "WEBP") {
     throw new Error(`Invalid WebP asset: ${ref}`);
   }
+
+  if (ref.includes("artist-working") && bytes.length < 20_000) {
+    throw new Error(`Suspiciously small artist asset: ${ref} (${bytes.length} bytes)`);
+  }
 }
 
 console.log(`[jan-ink] verified ${refs.size} referenced WebP assets`);
